@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { SearchableSelect } from "@/components/ui/searchable-select"
 import { colleges, majors, prompts } from "@/lib/supabase"
 
 interface FilterBarProps {
@@ -43,44 +43,26 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
           />
         </div>
 
-        <Select value={filters.college} onValueChange={(value) => handleFilterChange("college", value)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select College" />
-          </SelectTrigger>
-          <SelectContent>
-            {colleges.map((college) => (
-              <SelectItem key={college} value={college}>
-                {college}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={colleges}
+          value={filters.college}
+          onValueChange={(value) => handleFilterChange("college", value)}
+          placeholder="Select College"
+        />
 
-        <Select value={filters.prompt} onValueChange={(value) => handleFilterChange("prompt", value)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select Prompt" />
-          </SelectTrigger>
-          <SelectContent>
-            {prompts.map((prompt) => (
-              <SelectItem key={prompt} value={prompt}>
-                {prompt}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={prompts}
+          value={filters.prompt}
+          onValueChange={(value) => handleFilterChange("prompt", value)}
+          placeholder="Select Prompt"
+        />
 
-        <Select value={filters.major} onValueChange={(value) => handleFilterChange("major", value)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select Major" />
-          </SelectTrigger>
-          <SelectContent>
-            {majors.map((major) => (
-              <SelectItem key={major} value={major}>
-                {major}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={majors}
+          value={filters.major}
+          onValueChange={(value) => handleFilterChange("major", value)}
+          placeholder="Select Major"
+        />
       </div>
     </div>
   )

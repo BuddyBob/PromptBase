@@ -9,9 +9,10 @@ import { Card } from "@/components/ui/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { SearchableSelect } from "@/components/ui/searchable-select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { colleges, majors, prompts, createEssay } from "@/lib/supabase"
+import { colleges, majors, prompts, createEssay, getSession } from "@/lib/supabase"
+import { LoginRecommendation } from "@/components/login-recommendation"
 
 const formSchema = z.object({
   title: z.string().min(5, {
@@ -40,6 +41,7 @@ type FormData = z.infer<typeof formSchema>
 export default function SubmitPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema) as any,
@@ -57,6 +59,8 @@ export default function SubmitPage() {
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     setIsSubmitting(true)
     try {
+
+
       // Calculate word count
       const wordCount = values.content.trim().split(/\s+/).length
 
@@ -72,7 +76,7 @@ export default function SubmitPage() {
         verified: false, // New essays start unverified
       }
 
-      // Submit to Supabase
+      // Submit to Supabase (works for both logged-in and anonymous users)
       await createEssay(essayData)
       setIsSubmitted(true)
     } catch (error) {
@@ -131,20 +135,14 @@ export default function SubmitPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>College</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a college" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {colleges.slice(1).map((college) => (
-                          <SelectItem key={college} value={college}>
-                            {college}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <SearchableSelect
+                        options={colleges.slice(1)}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        placeholder="Select a college"
+                      />
+                    </FormControl>
                     <FormDescription>The college you were admitted to.</FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -157,20 +155,14 @@ export default function SubmitPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Prompt Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a prompt type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {prompts.slice(1).map((prompt) => (
-                          <SelectItem key={prompt} value={prompt}>
-                            {prompt}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <SearchableSelect
+                        options={prompts.slice(1)}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        placeholder="Select a prompt type"
+                      />
+                    </FormControl>
                     <FormDescription>The type of prompt you responded to.</FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -185,20 +177,14 @@ export default function SubmitPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Major</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a major" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {majors.slice(1).map((major) => (
-                          <SelectItem key={major} value={major}>
-                            {major}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <SearchableSelect
+                        options={majors.slice(1)}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        placeholder="Select a major"
+                      />
+                    </FormControl>
                     <FormDescription>Your intended or declared major.</FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -261,6 +247,7 @@ export default function SubmitPage() {
           </form>
         </Form>
       </Card>
+        
     </div>
   )
 }
