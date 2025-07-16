@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle } from "lucide-react"
+import { CheckCircle, ThumbsUp } from "lucide-react"
 import type { Essay } from "@/lib/supabase"
+import { likeEssay, getLikesCount } from "@/lib/supabase"
 
 interface EssayCardProps {
   essay: Essay
@@ -33,13 +34,29 @@ export function EssayCard({ essay }: EssayCardProps) {
         </div>
         <p className="text-sm text-slate-500 line-clamp-3">{essay.content}</p>
       </CardContent>
-      <CardFooter className="flex justify-between border-t pt-4">
+      <CardFooter className="flex justify-between items-center border-t pt-4">
         <div className="text-xs text-slate-500">
           {essay.word_count} words • {essay.year}
         </div>
-        <Link href={`/essays/${essay.id}`}>
-          <Badge className="bg-blue-600 hover:bg-blue-700">Read Full Essay</Badge>
-        </Link>
+        
+        <div className="flex items-center gap-3">
+          <button 
+            className="flex items-center gap-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+            onClick={() => {
+              likeEssay(essay.id)
+              getLikesCount(essay.id).then(likes => {
+                essay.likes = likes
+              })
+            }}
+          >
+            <ThumbsUp className="h-4 w-4" />
+            <span className="text-xs">{essay.likes || 0}</span>
+          </button>
+          
+          <Link href={`/essays/${essay.id}`}>
+            <Badge className="bg-blue-600 hover:bg-blue-700">Read Full Essay</Badge>
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   )

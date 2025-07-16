@@ -16,6 +16,7 @@ export type Essay = {
   year: number
   content: string
   verified: boolean
+  likes: number
   created_at: string
   updated_at: string
 }
@@ -42,10 +43,10 @@ export async function getEssayById(id: string) {
   return data as Essay
 }
 
-export async function createEssay(essay: Omit<Essay, 'id' | 'created_at' | 'updated_at'>) {
+export async function createEssay(essay: Omit<Essay, 'id' | 'likes' | 'created_at' | 'updated_at'>) {
   const { data, error } = await supabase
     .from('essays')
-    .insert([essay])
+    .insert([{ ...essay, likes: 0 }])
     .select()
     .single()
   
@@ -106,6 +107,39 @@ export async function searchEssays(searchTerm: string) {
   
   if (error) throw error
   return data as Essay[]
+}
+
+// Like functionality 
+export async function likeEssay(essayId: string) {
+  // First get the current likes count
+  const { data: essay, error: fetchError } = await supabase
+    .from('essays')
+    .select('likes')
+    .eq('id', essayId)
+    .single()
+    
+  if (fetchError) throw fetchError
+  
+  // Then increment the likes
+  const { data, error } = await supabase
+    .from('essays')
+    .update({ likes: (essay.likes || 0) + 1 })
+    .eq('id', essayId)
+    .select()
+    
+  if (error) throw error
+  return data[0]
+}
+
+export async function getLikesCount(essayId: string) {
+  const { data, error } = await supabase
+    .from('essays')
+    .select('likes')
+    .eq('id', essayId)
+    .single()
+  
+  if (error) throw error
+  return data?.likes || 0
 }
 
 // Constants for filters (these can still be static)
