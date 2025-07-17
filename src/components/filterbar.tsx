@@ -9,7 +9,7 @@ import { colleges, majors, prompts } from "@/lib/supabase"
 interface FilterBarProps {
   onFilterChange: (filters: {
     college: string
-    prompt: string
+    promptSearch: string
     major: string
     search: string
   }) => void
@@ -18,7 +18,7 @@ interface FilterBarProps {
 export function FilterBar({ onFilterChange }: FilterBarProps) {
   const [filters, setFilters] = useState({
     college: "All Colleges",
-    prompt: "All Prompts",
+    promptSearch: "",
     major: "All Majors",
     search: "",
   })
@@ -30,39 +30,47 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
   }
 
   return (
-    <div className="w-full bg-dark p-4 rounded-lg border shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500" />
+    <div className="w-full gradient-card p-6 rounded-2xl border-0 shadow-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="relative group">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 group-focus-within:text-slate-600 transition-colors duration-300" />
           <Input
             type="search"
             placeholder="Search keywords..."
-            className="pl-8"
+            className="pl-10 h-12 border-2 border-slate-200 dark:border-slate-600 rounded-xl focus:border-slate-500 dark:focus:border-slate-400 transition-all duration-300 bg-white/60 dark:bg-black/30 backdrop-blur-sm"
             value={filters.search}
             onChange={(e) => handleFilterChange("search", e.target.value)}
           />
         </div>
 
-        <SearchableSelect
-          options={colleges}
-          value={filters.college}
-          onValueChange={(value) => handleFilterChange("college", value)}
-          placeholder="Select College"
-        />
+        <div className="relative">
+          <SearchableSelect
+            options={colleges}
+            value={filters.college}
+            onValueChange={(value) => handleFilterChange("college", value)}
+            placeholder="Select College"
+          />
+        </div>
 
-        <SearchableSelect
-          options={prompts}
-          value={filters.prompt}
-          onValueChange={(value) => handleFilterChange("prompt", value)}
-          placeholder="Select Prompt"
-        />
+        <div className="relative group">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400 group-focus-within:text-stone-600 transition-colors duration-300" />
+          <Input
+            type="search"
+            placeholder="Search prompts..."
+            className="pl-10 h-12 border-2 border-slate-200 dark:border-slate-600 rounded-xl focus:border-stone-500 dark:focus:border-stone-400 transition-all duration-300 bg-white/60 dark:bg-black/30 backdrop-blur-sm"
+            value={filters.promptSearch}
+            onChange={(e) => handleFilterChange("promptSearch", e.target.value)}
+          />
+        </div>
 
-        <SearchableSelect
-          options={majors}
-          value={filters.major}
-          onValueChange={(value) => handleFilterChange("major", value)}
-          placeholder="Select Major"
-        />
+        <div className="relative">
+          <SearchableSelect
+            options={majors}
+            value={filters.major}
+            onValueChange={(value) => handleFilterChange("major", value)}
+            placeholder="Select Major"
+          />
+        </div>
       </div>
     </div>
   )

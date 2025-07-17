@@ -44,6 +44,9 @@ const config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          blue: "hsl(var(--accent-blue))",
+          gray: "hsl(var(--accent-gray))",
+          dark: "hsl(var(--accent-dark))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -52,6 +55,13 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Minimal accent colors
+        hover: {
+          blue: "hsl(var(--hover-blue))",
+        },
+        text: {
+          muted: "hsl(var(--text-muted))",
         },
       },
       borderRadius: {

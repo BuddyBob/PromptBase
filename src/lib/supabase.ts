@@ -21,8 +21,8 @@ export type Essay = {
   year: number
   content: string
   verified: boolean
-  likes: number
   created_at: string
+  updated_at: string
   user_id?: string
   author_name?: string
   author_email?: string
@@ -94,12 +94,34 @@ export async function deleteEssay(essayId: string) {
   const session = await getSession();
   if (!session) throw new Error('User not logged in');
 
-  const { error } = await supabase
+  // First, verify that the user owns this essay
+  const { data: essay, error: fetchError } = await supabase
+    .from('essays')
+    .select('user_id')
+    .eq('id', essayId)
+    .single();
+
+  if (fetchError) throw fetchError;
+  if (!essay || essay.user_id !== session.user.id) {
+    throw new Error('You can only delete your own essays');
+  }
+
+  // Delete all likes associated with this essay (regardless of who liked it)
+  const { error: likesError } = await supabase
+    .from('likes')
+    .delete()
+    .eq('essay_id', essayId);
+  
+  if (likesError) throw likesError;
+
+  // Then, delete the essay itself
+  const { error: essayError } = await supabase
     .from('essays')
     .delete()
     .eq('id', essayId)
     .eq('user_id', session.user.id);
-  if (error) throw error;
+  
+  if (essayError) throw essayError;
 }
 
 // Filter functions for your website

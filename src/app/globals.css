@@ -4,13 +4,18 @@
 
 @layer base {
   :root {
+    /* What do these values mean?
+       - The first value is the hue (0-360 degrees on the color wheel).
+       - The second value is saturation (0-100%).
+       - The third value is lightness (0-100%).
+    */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 220 14% 20%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -22,9 +27,18 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --ring: 220 14% 20%;
+    --radius: 0.75rem;
+    
+    /* Minimal elegant palette */
+    --accent-blue: 214 100% 97%;
+    --accent-gray: 220 13% 91%;
+    --accent-dark: 220 26% 14%;
+    --hover-blue: 214 84% 56%;
+    --text-muted: 215 16% 47%;
+    --border-light: 214 32% 91%;
   }
+  
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -32,7 +46,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
+    --primary: 220 14% 80%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -44,15 +58,222 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 220 14% 80%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
+  
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--accent-gray)) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
+  
+  .dark body {
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--accent-dark)) 100%);
+  }
+}
+
+@layer components {
+  /* Minimal card styling with animations */
+  .card-minimal {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--border-light));
+    transition: all 0.3s ease;
+  }
+  
+  .dark .card-minimal {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Simple hover animations */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Minimal button styles */
+  .btn-minimal {
+    background: hsl(var(--hover-blue));
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-minimal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.2), 
+      transparent);
+    transition: left 0.5s;
+  }
+  
+  .btn-minimal:hover::before {
+    left: 100%;
+  }
+  
+  .btn-minimal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  }
+  
+  
+  @keyframes subtleShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Smooth slide-in animations */
+  .slide-in-bottom {
+    animation: slideInBottom 0.6s ease-out;
+  }
+  
+  .slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+  }
+  
+  @keyframes slideInBottom {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideInLeft {
+    0% {
+      transform: translateX(-30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideInRight {
+    0% {
+      transform: translateX(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Floating and fade-in animations */
+  .fade-in {
+    animation: fadeIn 0.8s ease-in;
+  }
+  
+  .fade-in-delay {
+    animation: fadeIn 0.8s ease-in 0.3s both;
+  }
+  
+  .float-gentle {
+    animation: floatGentle 4s ease-in-out infinite;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  @keyframes floatGentle {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-8px); 
+    }
+  }
+  
+  /* Scale animations */
+  .scale-in {
+    animation: scaleIn 0.5s ease-out;
+  }
+  
+  @keyframes scaleIn {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Subtle pulse for emphasis */
+  .pulse-subtle {
+    animation: pulseSubtle 2s infinite;
+  }
+  
+  @keyframes pulseSubtle {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  /* Smooth rotate animation */
+  .rotate-slow {
+    animation: rotateSlow 20s linear infinite;
+  }
+  
+  @keyframes rotateSlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .btn-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.25), 
+      transparent);
+    transition: left 0.6s;
+  }
+  
+
+
 }

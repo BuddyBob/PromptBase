@@ -1,21 +1,25 @@
 
 "use client"
 
-import { useParams, notFound } from "next/navigation"
+import { useParams, notFound, useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, CheckCircle, Share2 } from "lucide-react"
-import { getEssayById, type Essay } from "@/lib/supabase"
+import { ArrowLeft, CheckCircle, Share2, Trash2 } from "lucide-react"
+import { getEssayById, deleteEssay, getSession, type Essay } from "@/lib/supabase"
 
 export default function EssayPage() {
   const params = useParams()
+  const router = useRouter()
   const id = params?.id as string
   const [essay, setEssay] = useState<Essay | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   useEffect(() => {
     async function loadEssay() {
@@ -24,6 +28,12 @@ export default function EssayPage() {
       try {
         const essayData = await getEssayById(id)
         setEssay(essayData)
+        
+        // Get current user info
+        const session = await getSession()
+        if (session) {
+          setCurrentUserId(session.user.id)
+        }
       } catch (err) {
         setError('Essay not found')
         console.error('Error loading essay:', err)
@@ -34,6 +44,27 @@ export default function EssayPage() {
 
     loadEssay()
   }, [id])
+
+  const handleDelete = async () => {
+    if (!showDeleteConfirm) {
+      setShowDeleteConfirm(true)
+      return
+    }
+
+    try {
+      setIsDeleting(true)
+      await deleteEssay(id)
+      router.push('/essays')
+    } catch (error) {
+      console.error('Error deleting essay:', error)
+      // You could show an error toast here
+    } finally {
+      setIsDeleting(false)
+      setShowDeleteConfirm(false)
+    }
+  }
+
+  const isOwner = currentUserId && essay?.user_id === currentUserId
 
   if (loading) {
     return (
@@ -63,16 +94,34 @@ export default function EssayPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <div className="mb-6">
-            <div className="flex items-center gap-2 mb-2">
-              <h1 className="text-3xl font-bold tracking-tight">{essay.title}</h1>
-              {essay.verified && (
-                <Badge
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold tracking-tight">{essay.title}</h1>
+                {essay.verified && (
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 text-green-700 border-green-200 flex items-center gap-1"
+                  >
+                    <CheckCircle className="h-3 w-3" />
+                    <span>Verified</span>
+                  </Badge>
+                )}
+              </div>
+              {isOwner && (
+                <Button
                   variant="outline"
-                  className="bg-green-50 text-green-700 border-green-200 flex items-center gap-1"
+                  size="sm"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className={`${
+                    showDeleteConfirm 
+                      ? 'border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300' 
+                      : 'border-slate-200 text-slate-600 hover:bg-red-50 hover:border-red-200 hover:text-red-600'
+                  }`}
                 >
-                  <CheckCircle className="h-3 w-3" />
-                  <span>Verified</span>
-                </Badge>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  {showDeleteConfirm ? 'Confirm Delete' : 'Delete Essay'}
+                </Button>
               )}
             </div>
             <div className="flex flex-wrap gap-2 mb-4">
