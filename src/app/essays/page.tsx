@@ -89,15 +89,15 @@ export default function EssaysPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-purple-950/20 dark:via-blue-950/20 dark:to-cyan-950/20"></div>
+        <div className="absolute inset-0 bg-animate opacity-50"></div>
         <div className="relative z-10 text-center">
           <div className="w-16 h-16 mx-auto mb-4 relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse"></div>
+            <div className="absolute inset-0 bg-blue-500 rounded-full animate-pulse"></div>
             <div className="absolute inset-2 bg-white dark:bg-black rounded-full flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-purple-500" />
+              <BookOpen className="w-6 h-6 text-blue-500" />
             </div>
           </div>
-          <p className="text-slate-600 dark:text-slate-300 font-medium">Loading essays...</p>
+          <p className="text-gray-600 dark:text-gray-300 font-medium">Loading essays...</p>
         </div>
       </div>
     )
@@ -106,9 +106,9 @@ export default function EssaysPage() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-pink-50 to-orange-50 dark:from-red-950/20 dark:via-pink-950/20 dark:to-orange-950/20"></div>
+        <div className="absolute inset-0 bg-animate opacity-50"></div>
         <div className="relative z-10 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-4 bg-red-500 rounded-full flex items-center justify-center">
             <span className="text-white text-2xl">!</span>
           </div>
           <p className="text-red-600 dark:text-red-400 font-medium">{error}</p>
@@ -119,39 +119,41 @@ export default function EssaysPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-blue-50/30 to-cyan-50/30 dark:from-purple-950/10 dark:via-blue-950/10 dark:to-cyan-950/10"></div>
-      <div className="absolute top-20 left-10 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-      <div className="absolute top-40 right-10 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
+      {/* Background Effects - matching home page */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-gray-100 dark:bg-gray-800 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 float-gentle"></div>
+        <div className="absolute top-40 right-10 w-80 h-80 bg-blue-50 dark:bg-blue-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20 float-gentle animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-gray-50 dark:bg-gray-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-25 rotate-slow"></div>
+      </div>
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         {/* Header Section */}
         <div className="mb-12 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 text-purple-700 dark:text-purple-300 text-sm font-medium border border-purple-200 dark:border-purple-700 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-black/40 backdrop-blur-sm text-gray-700 dark:text-gray-300 text-sm font-medium border border-gray-200 dark:border-gray-700 mb-6 slide-in-bottom">
             <Sparkles className="w-4 h-4" />
             Real Success Stories
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 slide-in-left">
             <span className="bg-gradient-to-r from-blue-600 to-gray-800 dark:from-blue-400 dark:to-gray-200 bg-clip-text text-transparent">
               Browse Essays
             </span>
           </h1>
           
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed slide-in-right">
             Discover successful college essays from students who got into top universities. 
             Filter by school, major, or prompt to find exactly what you're looking for.
           </p>
           
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-6 mt-8">
-            <div className="px-4 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-white/20 shadow-lg">
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                <span className="font-bold text-purple-600">{allEssays.length}</span> Essays Available
+          <div className="flex flex-wrap justify-center gap-6 mt-8 scale-in">
+            <div className="px-4 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-white/20 shadow-lg card-minimal hover-lift">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                <span className="font-bold text-blue-600">{allEssays.length}</span> Essays Available
               </span>
             </div>
-            <div className="px-4 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-white/20 shadow-lg">
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+            <div className="px-4 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-white/20 shadow-lg card-minimal hover-lift">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 <span className="font-bold text-blue-600">{filteredEssays.length}</span> Currently Showing
               </span>
             </div>
@@ -159,22 +161,22 @@ export default function EssaysPage() {
         </div>
         
         {/* Filter Section */}
-        <div className="mb-8">
+        <div className="mb-8 fade-in">
           <FilterBar onFilterChange={handleFilterChange} />
         </div>
         
         {/* Essays Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 fade-in-delay">
           {filteredEssays.length === 0 ? (
             <div className="col-span-full text-center py-16">
               <div className="max-w-md mx-auto">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 flex items-center justify-center">
-                  <Search className="w-8 h-8 text-slate-400" />
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                  <Search className="w-8 h-8 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-200">
+                <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">
                   {allEssays.length === 0 ? 'No Essays Yet' : 'No Essays Found'}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
                   {allEssays.length === 0 
                     ? 'The database appears to be empty. Add some sample essays to get started.' 
                     : 'Try adjusting your filters to find the essays you\'re looking for.'
@@ -184,7 +186,7 @@ export default function EssaysPage() {
                   <Button 
                     onClick={handleAddSampleData} 
                     disabled={addingData}
-                    className="btn-gradient shadow-lg"
+                    className="btn-minimal shadow-lg hover-lift"
                   >
                     {addingData ? (
                       <>

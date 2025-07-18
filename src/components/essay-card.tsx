@@ -141,15 +141,21 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
       
       <CardContent className="flex-grow relative z-10">
         <div className="flex flex-wrap gap-2 mb-3">
-            <Badge className="bg-gradient-to-r from-stone-100 to-slate-100 dark:from-stone-800 dark:to-slate-800 text-slate-700 dark:text-slate-200 border-none">
-              {essay.college}
+          <Badge className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40 hover:shadow-md transition-all duration-200">
+            🏛️ {essay.college}
+          </Badge>
+          
+          {essay.prompt !== "Unknown" && (
+            <Badge className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40 hover:shadow-md transition-all duration-200">
+              💭 {essay.prompt.length > 40 ? essay.prompt.slice(0, 40) + "..." : essay.prompt}
             </Badge>
-            <Badge className="bg-gradient-to-r from-slate-200 to-stone-100 dark:from-slate-700 dark:to-stone-800 text-slate-700 dark:text-slate-200 border-none">
-              {essay.prompt}
+          )}
+          
+          {essay.major && essay.major !== "Unknown" && (
+            <Badge className="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-950/50 dark:to-purple-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40 hover:shadow-md transition-all duration-200">
+              🎓 {essay.major}
             </Badge>
-            <Badge className="bg-gradient-to-r from-stone-200 to-slate-100 dark:from-stone-700 dark:to-slate-800 text-slate-700 dark:text-slate-200 border-none">
-              {essay.major}
-            </Badge>
+          )}
         </div>
         
         {showDeleteConfirm && (
@@ -177,10 +183,10 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
       <CardFooter className="flex justify-between items-center border-t border-slate-200/50 dark:border-slate-700/50 pt-4 relative z-10">
         <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-1 bg-gradient-to-r from-stone-100 to-slate-100 dark:from-stone-800/50 dark:to-slate-800/50 text-stone-700 dark:text-stone-300 rounded-full">
+            <span className="px-2 py-1 bg-gradient-to-b from-stone-100 to-slate-100 dark:from-stone-800/50 dark:to-slate-800/50 text-stone-700 dark:text-stone-300 rounded-full">
               {essay.word_count} words
             </span>
-            <span className="px-2 py-1 bg-gradient-to-r from-slate-100 to-stone-100 dark:from-slate-800/50 dark:to-stone-800/50 text-slate-700 dark:text-slate-300 rounded-full">
+            <span className="px-2 py-1 bg-gradient-to-b from-slate-100 to-stone-100 dark:from-slate-800/50 dark:to-stone-800/50 text-slate-700 dark:text-slate-300 rounded-full">
               {essay.year}
             </span>
           </div>

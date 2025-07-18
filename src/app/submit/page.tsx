@@ -10,31 +10,22 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { SearchableSelect } from "@/components/ui/searchable-select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PromptInput } from "@/components/ui/prompt-input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { colleges, majors, prompts, createEssay, getSession } from "@/lib/supabase"
 import { LoginRecommendation } from "@/components/login-recommendation"
 
 const formSchema = z.object({
-  title: z.string().min(5, {
-    message: "Title must be at least 5 characters.",
-  }),
   content: z.string().min(100, {
     message: "Essay must be at least 100 characters.",
   }),
   college: z.string().min(1, {
-    message: "Please select a college.",
+    message: "Please select the college or platform this essay is for.",
   }),
-  prompt: z.string().min(10, {
-    message: "Please enter the essay prompt (at least 10 characters).",
+  prompt: z.string().min(1, {
+    message: "Please provide the prompt or select 'Unknown'.",
   }),
-  major: z.string().min(1, {
-    message: "Please select a major.",
-  }),
-  year: z.string().regex(/^\d{4}$/, {
-    message: "Please enter a valid year (e.g., 2023).",
-  }),
-  includeProof: z.boolean(),
   submitAnonymously: z.boolean(),
 })
 
@@ -50,13 +41,9 @@ export default function SubmitPage() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema) as any,
     defaultValues: {
-      title: "",
       content: "",
       college: "",
       prompt: "",
-      major: "",
-      year: new Date().getFullYear().toString(),
-      includeProof: false,
       submitAnonymously: false,
     },
   })
@@ -96,17 +83,22 @@ export default function SubmitPage() {
       // Calculate word count
       const wordCount = values.content.trim().split(/\s+/).length
 
+      // Generate a simple title from the prompt or college
+      const autoTitle = values.prompt.length > 50 
+        ? `${values.college} Essay` 
+        : values.prompt.slice(0, 50) + "..."
+
       // Create essay object for Supabase
       const essayData = {
-        title: values.title,
+        title: autoTitle,
         content: values.content,
         college: values.college,
         prompt: values.prompt,
-        major: values.major,
+        major: "Unknown", // Default value, can be edited later
         word_count: wordCount,
-        year: parseInt(values.year),
-        verified: false, // New essays start unverified
-        author_name: values.submitAnonymously ? 'Anonymous' : undefined, // Let createEssay handle default
+        year: new Date().getFullYear(), // Current year as default
+        verified: false,
+        author_name: values.submitAnonymously ? 'Anonymous' : undefined,
       }
 
       // Submit to Supabase (only for authenticated users)
@@ -171,119 +163,101 @@ export default function SubmitPage() {
   return (
     <div className="container px-4 py-8 md:px-6 md:py-12">
       <div className="mb-8 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold tracking-tight mb-4">Submit Your Essay</h1>
-        <p className="text-slate-500">
-          Share your successful college essay to help other students. Your contribution will be reviewed before being
-          added to our repository. All personal information will be removed.
+        <h1 className="text-3xl font-bold tracking-tight mb-4">Share Your Essay</h1>
+        <p className="text-slate-500 mb-4">
+          Help other students by sharing your college essay. Quick 3-step process - just paste your essay, 
+          select the college, and add the prompt if you have it.
         </p>
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">⚡ Quick Submit Process:</h3>
+          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+            <li><strong>Step 1:</strong> Paste your essay content</li>
+            <li><strong>Step 2:</strong> Select college or platform (Common App, UC, etc.)</li>
+            <li><strong>Step 3:</strong> Add prompt or mark as "Unknown"</li>
+          </ul>
+          <p className="text-xs text-blue-700 dark:text-blue-300 mt-3">
+            ✨ Additional details like major and admission status can be added later
+          </p>
+        </div>
       </div>
 
       <Card className="p-6 max-w-3xl mx-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-8">
-            <FormField
-              control={form.control as any}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Essay Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Common App - Personal Growth" {...field} />
-                  </FormControl>
-                  <FormDescription>Give your essay a descriptive title.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control as any}
-                name="college"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>College</FormLabel>
-                    <FormControl>
-                      <SearchableSelect
-                        options={colleges.slice(1)}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Select a college"
-                      />
-                    </FormControl>
-                    <FormDescription>The college you were admitted to.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control as any}
-                name="prompt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Essay Prompt</FormLabel>
-                    <FormControl>
-                      <PromptInput
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder="Enter the full essay prompt you responded to..."
-                      />
-                    </FormControl>
-                    <FormDescription>The exact prompt/question you answered in your essay.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control as any}
-                name="major"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Major</FormLabel>
-                    <FormControl>
-                      <SearchableSelect
-                        options={majors.slice(1)}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Select a major"
-                      />
-                    </FormControl>
-                    <FormDescription>Your intended or declared major.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control as any}
-                name="year"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Admission Year</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., 2023" {...field} />
-                    </FormControl>
-                    <FormDescription>The year you were admitted.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
+            
+            {/* Step 1: Essay Content */}
             <FormField
               control={form.control as any}
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Essay Content</FormLabel>
+                  <FormLabel className="text-lg font-semibold">Step 1: Your Essay</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Paste your essay here..." className="min-h-[300px]" {...field} />
+                    <Textarea 
+                      placeholder="Paste your complete essay here..." 
+                      className="min-h-[300px] text-base leading-relaxed" 
+                      {...field} 
+                    />
                   </FormControl>
-                  <FormDescription>Your complete essay. Personal information will be redacted.</FormDescription>
+                  <FormDescription>
+                    Copy and paste your complete college essay. We'll automatically remove any personal information.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Step 2: College/Platform */}
+            <FormField
+              control={form.control as any}
+              name="college"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">Step 2: College or Platform</FormLabel>
+                  <FormControl>
+                    <SearchableSelect
+                      options={[...colleges.slice(1), "Common Application", "UC System", "Other"]}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      placeholder="Select college or platform"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Choose the college this essay was written for, or select a platform like "Common Application"
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Step 3: Prompt */}
+            <FormField
+              control={form.control as any}
+              name="prompt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">Step 3: Essay Prompt</FormLabel>
+                  <FormControl>
+                    <div className="space-y-3">
+                      <PromptInput
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="Paste the full prompt, or type a short description..."
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => field.onChange("Unknown")}
+                        className="text-xs"
+                      >
+                        Mark as "Unknown"
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    Add the essay prompt if you have it, or click "Unknown" to skip this step
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -294,42 +268,21 @@ export default function SubmitPage() {
               control={form.control as any}
               name="submitAnonymously"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-lg border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-800/50">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>Submit anonymously</FormLabel>
+                    <FormLabel className="font-medium">Submit anonymously</FormLabel>
                     <FormDescription>
-                      Check this box to submit your essay anonymously. Your name will not be displayed publicly,
-                      even though you are logged in.
+                      Your name won't be displayed publicly with this essay
                     </FormDescription>
                   </div>
                 </FormItem>
               )}
             />
 
-
-            <FormField
-              control={form.control as any}
-              name="includeProof"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Include proof of admission (optional)</FormLabel>
-                    <FormDescription>
-                      You can upload proof of admission to receive a verification badge. This will be reviewed privately
-                      and not shared publicly.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isSubmitting}>
               {isSubmitting ? "Submitting..." : "Submit Essay"}
             </Button>
           </form>

@@ -83,10 +83,10 @@ export function Header() {
                 onClick={logout}
                 variant="outline"
                 size="sm"
-                className="bg-gradient-to-r from-red-300 to-red-300 hover:from-red-600 hover:to-red-700 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover-lift relative overflow-hidden group"
+                className="bg-background"
               >
                 <span className="relative z-10">Logout</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+                
               </Button>
             </div>
           ) : (

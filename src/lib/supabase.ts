@@ -26,6 +26,9 @@ export type Essay = {
   user_id?: string
   author_name?: string
   author_email?: string
+  essay_type?: 'common_app' | 'supplemental' | 'piq' | null
+  target_college?: string | null
+  is_admitted?: boolean | null
 }
 
 // Type definitions for essay data
@@ -37,6 +40,9 @@ export type EssayData = {
   word_count: number;
   content: string;
   year: number;
+  essay_type?: 'common_app' | 'supplemental' | 'piq';
+  target_college?: string;
+  is_admitted?: boolean;
 }
 
 // Database operations
@@ -243,6 +249,7 @@ export const colleges = [
   "Cornell University",
   
   // Top Public Universities
+  "UC PIQS",
   "UC Berkeley",
   "UCLA",
   "UC San Diego",
