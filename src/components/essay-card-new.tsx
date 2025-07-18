@@ -107,7 +107,7 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.4 }}
       whileHover={{ scale: 1.02 }}
       className="h-full"
     >

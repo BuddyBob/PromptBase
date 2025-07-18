@@ -15,6 +15,7 @@ import { PromptInput } from "@/components/ui/prompt-input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { colleges, majors, prompts, createEssay, getSession } from "@/lib/supabase"
 import { LoginRecommendation } from "@/components/login-recommendation"
+import { motion } from "motion/react"
 
 const formSchema = z.object({
   content: z.string().min(100, {
@@ -149,26 +150,66 @@ export default function SubmitPage() {
 
   if (isSubmitted) {
     return (
-      <div className="container px-4 py-16 md:px-6 md:py-24 flex flex-col items-center justify-center text-center">
-        <h1 className="text-3xl font-bold tracking-tight mb-4">Thank You!</h1>
-        <p className="text-slate-500 max-w-md mb-8">
+      <motion.div 
+        className="container px-4 py-16 md:px-6 md:py-24 flex flex-col items-center justify-center text-center"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <motion.h1 
+          className="text-3xl font-bold tracking-tight mb-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05, duration: 0.2 }}
+        >
+          Thank You!
+        </motion.h1>
+        <motion.p 
+          className="text-gray-500 max-w-md mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.2 }}
+        >
           Your essay has been submitted and is now under review. We appreciate your contribution to helping other
           students!
-        </p>
-        <Button onClick={() => setIsSubmitted(false)}>Submit Another Essay</Button>
-      </div>
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.15, duration: 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Button onClick={() => setIsSubmitted(false)}>Submit Another Essay</Button>
+        </motion.div>
+      </motion.div>
     )
   }
 
   return (
-    <div className="container px-4 py-8 md:px-6 md:py-12">
-      <div className="mb-8 max-w-3xl mx-auto">
+    <motion.div 
+      className="container px-4 py-8 md:px-6 md:py-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div 
+        className="mb-8 max-w-3xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05, duration: 0.2 }}
+      >
         <h1 className="text-3xl font-bold tracking-tight mb-4">Share Your Essay</h1>
-        <p className="text-slate-500 mb-4">
+        <p className="text-gray-500 mb-4">
           Help other students by sharing your college essay. Quick 3-step process - just paste your essay, 
           select the college, and add the prompt if you have it.
         </p>
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <motion.div 
+          className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.2 }}
+        >
           <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">⚡ Quick Submit Process:</h3>
           <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
             <li><strong>Step 1:</strong> Paste your essay content</li>
@@ -178,45 +219,61 @@ export default function SubmitPage() {
           <p className="text-xs text-blue-700 dark:text-blue-300 mt-3">
             ✨ Additional details like major and admission status can be added later
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <Card className="p-6 max-w-3xl mx-auto">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-8">
-            
-            {/* Step 1: Essay Content */}
-            <FormField
-              control={form.control as any}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg font-semibold">Step 1: Your Essay</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Paste your complete essay here..." 
-                      className="min-h-[300px] text-base leading-relaxed" 
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Copy and paste your complete college essay. We'll automatically remove any personal information.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.2 }}
+      >
+        <Card className="p-6 max-w-3xl mx-auto">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-8">
+              
+              {/* Step 1: Essay Content */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.2 }}
+              >
+                <FormField
+                  control={form.control as any}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold">Step 1: Your Essay</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Paste your complete essay here..." 
+                          className="min-h-[300px] text-base leading-relaxed" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Copy and paste your complete college essay. We'll automatically remove any personal information.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </motion.div>
 
-            {/* Step 2: College/Platform */}
-            <FormField
-              control={form.control as any}
-              name="college"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg font-semibold">Step 2: College or Platform</FormLabel>
-                  <FormControl>
-                    <SearchableSelect
-                      options={[...colleges.slice(1), "Common Application", "UC System", "Other"]}
+              {/* Step 2: College/Platform */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.25, duration: 0.2 }}
+              >
+                <FormField
+                  control={form.control as any}
+                  name="college"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold">Step 2: College or Platform</FormLabel>
+                      <FormControl>
+                        <SearchableSelect
+                          options={[...colleges.slice(1), "Common Application", "UC System", "Other"]}
                       value={field.value}
                       onValueChange={field.onChange}
                       placeholder="Select college or platform"
@@ -229,14 +286,20 @@ export default function SubmitPage() {
                 </FormItem>
               )}
             />
+              </motion.div>
 
-            {/* Step 3: Prompt */}
-            <FormField
-              control={form.control as any}
-              name="prompt"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg font-semibold">Step 3: Essay Prompt</FormLabel>
+              {/* Step 3: Prompt */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.2 }}
+              >
+                <FormField
+                  control={form.control as any}
+                  name="prompt"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold">Step 3: Essay Prompt</FormLabel>
                   <FormControl>
                     <div className="space-y-3">
                       <PromptInput
@@ -262,9 +325,15 @@ export default function SubmitPage() {
                 </FormItem>
               )}
             />
+              </motion.div>
 
-            {/* Anonymous submission option */}
-            <FormField
+              {/* Anonymous submission option */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.35, duration: 0.2 }}
+              >
+                <FormField
               control={form.control as any}
               name="submitAnonymously"
               render={({ field }) => (
@@ -281,14 +350,23 @@ export default function SubmitPage() {
                 </FormItem>
               )}
             />
+              </motion.div>
 
-            <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Submit Essay"}
-            </Button>
-          </form>
-        </Form>
-      </Card>
-        
-    </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.2 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Submit Essay"}
+                </Button>
+              </motion.div>
+            </form>
+          </Form>
+        </Card>
+      </motion.div>
+    </motion.div>
   )
 }
