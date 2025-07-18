@@ -69,6 +69,13 @@ export function Header() {
               )}
             </Link>
           </motion.div>
+          {session && (
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link href="/dashboard" className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                Dashboard
+              </Link>
+            </motion.div>
+          )}
         </nav>
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -155,6 +162,15 @@ export function Header() {
                     </span>
                   )}
                 </Link>
+                {session && (
+                  <Link
+                    href="/dashboard"
+                    className="text-sm font-medium hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

@@ -29,6 +29,8 @@ export type Essay = {
   essay_type?: 'common_app' | 'supplemental' | 'piq' | null
   target_college?: string | null
   is_admitted?: boolean | null
+  likes?: number
+  views?: number
 }
 
 // Type definitions for essay data
@@ -233,6 +235,80 @@ export async function getSession() {
   const { data, error } = await supabase.auth.getSession();
   if (error) throw error;
   return data.session;
+}
+
+// User-specific functions
+export async function getUserEssays(userId: string) {
+  const { data, error } = await supabase
+    .from('essays')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+  
+  if (error) throw error
+  return data as Essay[]
+}
+
+export async function getUserSavedEssays(userId: string) {
+  const { data, error } = await supabase
+    .from('saved_essays')
+    .select(`
+      essays (*)
+    `)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+  
+  if (error) throw error
+  return data?.map((item: any) => item.essays).filter(Boolean) as Essay[]
+}
+
+export async function getUserLikedEssays(userId: string) {
+  const { data, error } = await supabase
+    .from('likes')
+    .select(`
+      essays (*)
+    `)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+  
+  if (error) throw error
+  return data?.map((item: any) => item.essays).filter(Boolean) as Essay[]
+}
+
+// Save an essay for a user
+export async function saveEssay(userId: string, essayId: string) {
+  const { error } = await supabase
+    .from('saved_essays')
+    .insert({
+      user_id: userId,
+      essay_id: essayId
+    })
+  
+  if (error) throw error
+}
+
+// Unsave an essay
+export async function unsaveEssay(userId: string, essayId: string) {
+  const { error } = await supabase
+    .from('saved_essays')
+    .delete()
+    .eq('user_id', userId)
+    .eq('essay_id', essayId)
+  
+  if (error) throw error
+}
+
+// Check if user has saved an essay
+export async function isEssaySaved(userId: string, essayId: string) {
+  const { data, error } = await supabase
+    .from('saved_essays')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('essay_id', essayId)
+    .single()
+  
+  if (error && error.code !== 'PGRST116') throw error
+  return !!data
 }
 
 // Constants for filters (these can still be static)

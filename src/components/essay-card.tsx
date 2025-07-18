@@ -4,9 +4,19 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, ThumbsUp, User, Trash2 } from "lucide-react"
+import { CheckCircle, ThumbsUp, User, Trash2, BookMarked, Bookmark } from "lucide-react"
 import type { Essay } from "@/lib/supabase"
-import { likeEssay, unlikeEssay, getLikeCount, getSession, supabase, deleteEssay } from "@/lib/supabase"
+import { 
+  likeEssay, 
+  unlikeEssay, 
+  getLikeCount, 
+  getSession, 
+  supabase, 
+  deleteEssay,
+  saveEssay,
+  unsaveEssay,
+  isEssaySaved
+} from "@/lib/supabase"
 import { useState, useEffect } from "react"
 import { LoginRecommendation } from "./login-recommendation"
 import { motion } from "motion/react"
@@ -19,6 +29,7 @@ interface EssayCardProps {
 export function EssayCard({ essay, onDelete }: EssayCardProps) {
   const [likeCount, setLikeCount] = useState(0)
   const [isLiked, setIsLiked] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
@@ -26,7 +37,7 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   useEffect(() => {
-    // Fetch initial like count, user's like status, and current user info
+    // Fetch initial like count, user's like status, saved status, and current user info
     const fetchLikeData = async () => {
       try {
         const count = await getLikeCount(essay.id)
@@ -37,14 +48,19 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
         if (session) {
           setCurrentUserId(session.user.id)
           
-          const { data } = await supabase
+          // Check like status
+          const { data: likeData } = await supabase
             .from('likes')
             .select('*')
             .eq('user_id', session.user.id)
             .eq('essay_id', essay.id)
             .single()
           
-          setIsLiked(!!data)
+          setIsLiked(!!likeData)
+          
+          // Check saved status
+          const savedStatus = await isEssaySaved(session.user.id, essay.id)
+          setIsSaved(savedStatus)
         }
       } catch (error) {
         console.error('Error fetching like data:', error)
@@ -76,6 +92,28 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
       }
     } catch (error) {
       console.error('Error toggling like:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSave = async () => {
+    if (!currentUserId) {
+      setShowLoginModal(true)
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      if (isSaved) {
+        await unsaveEssay(currentUserId, essay.id)
+        setIsSaved(false)
+      } else {
+        await saveEssay(currentUserId, essay.id)
+        setIsSaved(true)
+      }
+    } catch (error) {
+      console.error('Error saving/unsaving essay:', error)
     } finally {
       setIsLoading(false)
     }
@@ -196,24 +234,23 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
           </div>
         </CardContent>
         
-        <CardFooter className="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
-          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full">
+        <CardFooter className="flex flex-col gap-3 border-t border-gray-200 dark:border-gray-700 pt-4">
+          {/* Top row: Word count and year */}
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+              <span className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg font-medium">
                 {essay.word_count} words
               </span>
-              <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full">
+              <span className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg font-medium">
                 {essay.year}
               </span>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
+            
             <motion.button 
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-full transition-all duration-300 ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-300 ${
                 isLiked 
-                  ? 'bg-gray-800 text-white' 
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' 
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500'
               }`}
               onClick={handleLikeToggle}
               disabled={isLoading}
@@ -221,14 +258,41 @@ export function EssayCard({ essay, onDelete }: EssayCardProps) {
               whileTap={{ scale: 0.95 }}
             >
               <ThumbsUp className={`h-4 w-4 transition-transform duration-300 ${isLiked ? 'fill-current' : ''}`} />
-              <span className="text-xs font-semibold">{likeCount}</span>
+              <span className="text-sm font-medium">{likeCount}</span>
+            </motion.button>
+          </div>
+          
+          {/* Bottom row: Save and Read buttons */}
+          <div className="flex items-center gap-3 w-full">
+            <motion.button
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium ${
+                isSaved 
+                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' 
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600'
+              }`}
+              onClick={handleSave}
+              disabled={isLoading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              title={isSaved ? 'Unsave this essay' : 'Save this essay'}
+            >
+              {isSaved ? (
+                <Bookmark className="h-4 w-4 fill-current" />
+              ) : (
+                <BookMarked className="h-4 w-4" />
+              )}
+              <span>{isSaved ? 'Saved' : 'Save'}</span>
             </motion.button>
             
-            <Link href={`/essays/${essay.id}`}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Badge className="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5">
+            <Link href={`/essays/${essay.id}`} className="flex-1">
+              <motion.div 
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }}
+                className="w-full"
+              >
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium">
                   Read Full Essay
-                </Badge>
+                </Button>
               </motion.div>
             </Link>
           </div>
