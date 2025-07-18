@@ -2,7 +2,6 @@
 
 A modern, database-backed college essay repository built with Next.js and Supabase. Browse real college essays from admitted students, filter by school, major, and prompt type, and contribute your own successful essays.
 
-[![GitHub Repo stars](https://img.shields.io/github/stars/thavasantonio/promptbase?style=social)](https://github.com/thavasantonio/promptbase)
 
 ## Screenshot
 
