@@ -128,13 +128,13 @@ export default function Home() {
             >
               <div className="space-y-6">
                 <motion.div 
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-700 dark:text-gray-300 text-sm shadow-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 text-sm shadow-sm font-medium"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.1, duration: 0.2 }}
                 >
-                  <Heart className="w-4 h-4 text-red-500" />
-                  Made by students, for students
+                  <Heart className="w-4 h-4 text-blue-500" />
+                  100% FREE • Community-Powered • Student-First
                 </motion.div>
                 
                 <motion.h1 
@@ -143,8 +143,8 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15, duration: 0.3 }}
                 >
-                  Write Your Best<br />
-                  College Essays Possible
+                  The Free Community<br />
+                  for College Essays
                 </motion.h1>
                 
                 <motion.p 
@@ -153,7 +153,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
                 >
-                  Apply to colleges with confidence.
+                  No paywalls, no subscriptions, no gatekeeping.
                 </motion.p>
                 
                 <motion.p 
@@ -162,7 +162,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25, duration: 0.3 }}
                 >
-                  We'll help you tell your story and capture your unique strengths.
+                  Real essays from real students, shared freely to help the next generation succeed. Join our supportive community where everyone wins together.
                 </motion.p>
               </div>
               
@@ -175,14 +175,14 @@ export default function Home() {
                 <Link href="/essays">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button className="text-lg px-8 py-3 h-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg">
-                      Read essay examples →
+                      Explore Free Essays →
                     </Button>
                   </motion.div>
                 </Link>
                 <Link href="/submit">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button variant="outline" className="text-lg px-8 py-3 h-auto border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 shadow-lg">
-                      Share your essay →
+                      Help Others (Free!) →
                     </Button>
                   </motion.div>
                 </Link>
@@ -226,7 +226,111 @@ export default function Home() {
                 
                 </div>
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  <span className="font-bold text-blue-600 dark:text-blue-400">Helping</span> students and parents succeed in college admissions. <Link href="/essays" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Join our community today →</Link>
+                  <span className="font-bold text-blue-600 dark:text-blue-400">A thriving community</span> where students support each other. <Link href="/essays" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Join for free today →</Link>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Value Proposition Section - What Makes Us Different */}
+        <section className="w-full py-16 md:py-20 bg-white dark:bg-gray-950 border-b">
+          <div className="container px-4 md:px-6">
+            <motion.div 
+              className="max-w-5xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="text-center mb-12">
+                <motion.h2 
+                  className="text-3xl font-bold mb-4 text-gray-900 dark:text-white"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                >
+                  Why Choose PromptBase?
+                </motion.h2>
+                <motion.p 
+                  className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.15, duration: 0.3 }}
+                >
+                  We're different from other essay platforms. Here's how we put students first:
+                </motion.p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <motion.div 
+                  className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                    <Heart className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-blue-800 dark:text-blue-300 mb-2">100% Free Forever</h3>
+                  <p className="text-blue-700 dark:text-blue-200 text-sm leading-relaxed">
+                    No hidden fees, no premium tiers, no paywalls. Every essay, every feature, completely free. 
+                    We believe great college advice shouldn't cost a fortune.
+                  </p>
+                </motion.div>
+                
+                <motion.div 
+                  className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.25, duration: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-purple-800 dark:text-purple-300 mb-2">Community-Powered</h3>
+                  <p className="text-purple-700 dark:text-purple-200 text-sm leading-relaxed">
+                    Built by students, for students. Real essays from real people who got accepted. 
+                    We grow stronger when we help each other succeed.
+                  </p>
+                </motion.div>
+                
+                <motion.div 
+                  className="bg-gradient-to-br from-indigo-50 to-cyan-50 dark:from-indigo-900/20 dark:to-cyan-900/20 p-6 rounded-lg border border-indigo-200 dark:border-indigo-800"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mb-4">
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-indigo-800 dark:text-indigo-300 mb-2">Student-Friendly Design</h3>
+                  <p className="text-indigo-700 dark:text-indigo-200 text-sm leading-relaxed">
+                    Clean, intuitive interface that doesn't overwhelm. Easy filtering, smooth reading experience, 
+                    and mobile-friendly design that works the way you think.
+                  </p>
+                </motion.div>
+              </div>
+              
+              <motion.div 
+                className="mt-12 text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.35, duration: 0.3 }}
+              >
+                <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-blue-200 dark:border-blue-800">
+                  <span className="text-blue-600 dark:text-blue-400">✓</span> No account required to browse
+                  <span className="text-purple-600 dark:text-purple-400">✓</span> No spam or marketing emails
+                  <span className="text-indigo-600 dark:text-indigo-400">✓</span> No data tracking or selling
                 </div>
               </motion.div>
             </motion.div>
@@ -252,7 +356,7 @@ export default function Home() {
                   transition={{ delay: 0.1, duration: 0.2 }}
                 >
                   <BookOpen className="w-4 h-4" />
-                  Real Stories, Real Success
+                  Real Stories, Real Impact
                 </motion.div>
                 
                 <motion.h2 
@@ -262,7 +366,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.15, duration: 0.3 }}
                 >
-                  From struggling with essays to acceptance letters
+                  From blank page anxiety to acceptance letters
                 </motion.h2>
                 
                 <motion.p 
@@ -272,8 +376,9 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.2, duration: 0.3 }}
                 >
-                  Every student here started just like you - staring at a blank page, wondering what to write. 
-                  See how they turned their experiences into compelling stories that opened doors to their dream schools.
+                  Every student in our community started exactly where you are now. See how they transformed their experiences 
+                  into compelling stories that opened doors to their dream schools. No consultants, no expensive services - 
+                  just authentic stories shared freely.
                 </motion.p>
                 
                 <motion.div 
@@ -286,7 +391,7 @@ export default function Home() {
                   <Link href="/essays">
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button className="bg-blue-600 hover:bg-blue-700">
-                        Browse Success Stories
+                        Browse Success Stories (Free)
                       </Button>
                     </motion.div>
                   </Link>
@@ -372,10 +477,10 @@ export default function Home() {
                 transition={{ duration: 0.2 }}
               >
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                  How it works
+                  How our community works
                 </h2>
                 <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                  Three simple steps to find inspiration for your college application
+                  Simple, free, and built on the power of students helping students
                 </p>
               </motion.div>
               
@@ -392,9 +497,9 @@ export default function Home() {
                     <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="text-center space-y-2">
-                    <h3 className="text-xl font-semibold">Browse real essays</h3>
+                    <h3 className="text-xl font-semibold">Discover Real Essays</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      Read essays from students who got into top schools
+                      Browse authentic essays from students who got accepted to top colleges - all shared freely
                     </p>
                   </div>
                 </motion.div>
@@ -407,13 +512,13 @@ export default function Home() {
                   transition={{ delay: 0.1, duration: 0.2 }}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                    <Search className="h-8 w-8 text-green-600 dark:text-green-400" />
+                  <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                    <Search className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="text-center space-y-2">
-                    <h3 className="text-xl font-semibold">Find your match</h3>
+                    <h3 className="text-xl font-semibold">Find Your Inspiration</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      Filter by school, major, or essay type
+                      Filter by dream school, major, or essay type to find stories that resonate with your journey
                     </p>
                   </div>
                 </motion.div>
@@ -426,13 +531,13 @@ export default function Home() {
                   transition={{ delay: 0.15, duration: 0.2 }}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
-                    <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                    <Users className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div className="text-center space-y-2">
-                    <h3 className="text-xl font-semibold">Give back</h3>
+                    <h3 className="text-xl font-semibold">Pay It Forward</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      Share your own essay to help future students
+                      Share your own successful essay to help the next generation of students (completely optional!)
                     </p>
                   </div>
                 </motion.div>
@@ -453,10 +558,10 @@ export default function Home() {
             >
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                  Students love PromptBase
+                  Students love our free community
                 </h2>
                 <p className="text-xl text-gray-600 dark:text-gray-300">
-                  Here's what students are saying about finding their inspiration
+                  Real feedback from students who found their voice without paying a penny
                 </p>
               </div>
               
@@ -491,7 +596,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="text-gray-700 dark:text-gray-300 text-sm">
-                    "I was stuck on my Common App essay for weeks. Reading real examples here helped me find my voice and write something authentic. Got into my dream school!"
+                    "I couldn't afford expensive essay consultants, but I didn't need them! The free essays here showed me exactly what admissions officers want to see. So grateful for this community!"
                   </blockquote>
                 </motion.div>
 
@@ -524,7 +629,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="text-gray-700 dark:text-gray-300 text-sm">
-                    "The essays here showed me that vulnerability and authenticity matter more than perfect grammar. My 'messy' story got me into engineering school!"
+                    "This platform is amazing - completely free and filled with genuine stories from real students. No fake testimonials or sales pitches, just authentic help when you need it most."
                   </blockquote>
                 </motion.div>
 
@@ -557,7 +662,7 @@ export default function Home() {
                     ))}
                   </div>
                   <blockquote className="text-gray-700 dark:text-gray-300 text-sm">
-                    "Found essays from students with similar backgrounds. It gave me confidence that my story was worth telling. Now I'm paying it forward by sharing mine!"
+                    "The community here is incredible - students genuinely helping each other without expecting anything in return. After getting accepted, I shared my essay to help others. It's the circle of kindness!"
                   </blockquote>
                 </motion.div>
               </div>
@@ -571,8 +676,8 @@ export default function Home() {
               >
                 <Link href="/essays">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button className="text-lg px-8 py-3 h-auto">
-                      Start reading stories
+                    <Button className="text-lg px-8 py-3 h-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg">
+                      Start browsing for free
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </motion.div>
