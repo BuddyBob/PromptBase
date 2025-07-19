@@ -14,50 +14,6 @@ export default function Home() {
         <section className="w-full py-16 md:py-24 lg:py-32 relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-blue-100 dark:from-purple-950 dark:via-blue-900 dark:to-indigo-800">
           {/* Floating essay documents and student photos */}
           <div className="absolute inset-0 overflow-hidden">
-            {/* Floating emojis */}
-            <motion.div 
-              className="absolute top-10 left-10 text-4xl"
-              animate={{ y: [-20, 20, -20], rotate: [0, 360, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            >
-              🎓
-            </motion.div>
-            <motion.div 
-              className="absolute top-32 right-20 text-3xl"
-              animate={{ y: [20, -20, 20], rotate: [0, -360, 0] }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            >
-              📚
-            </motion.div>
-            <motion.div 
-              className="absolute bottom-20 left-20 text-3xl"
-              animate={{ y: [-15, 15, -15], rotate: [0, 180, 0] }}
-              transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            >
-              ✨
-            </motion.div>
-            <motion.div 
-              className="absolute bottom-32 right-10 text-4xl"
-              animate={{ y: [15, -15, 15], rotate: [0, 360, 0] }}
-              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-            >
-              🚀
-            </motion.div>
-            <motion.div 
-              className="absolute top-1/2 left-32 text-2xl"
-              animate={{ y: [-10, 10, -10], rotate: [0, -180, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            >
-              💡
-            </motion.div>
-            <motion.div 
-              className="absolute top-1/3 right-32 text-3xl"
-              animate={{ y: [10, -10, 10], rotate: [0, 360, 0] }}
-              transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-            >
-              🎯
-            </motion.div>
-            
             {/* Floating essay documents */}
             <motion.div 
               className="absolute top-16 left-8 w-32 h-40 bg-gradient-to-br from-white to-pink-50 dark:from-gray-800 dark:to-purple-900 rounded-lg shadow-lg opacity-30"
